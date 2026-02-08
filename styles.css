@@ -99,21 +99,27 @@ body {
 }
 
 .brand-mark {
-  display: grid;
-  place-items: center;
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 9px;
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: 0.9rem;
-  background: linear-gradient(132deg, var(--brand), var(--brand-strong));
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(10, 79, 83, 0.22);
+}
+
+.brand-text-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
 .brand-text {
   font-size: 0.94rem;
   font-weight: 600;
+}
+
+.brand-subtext {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
 }
 
 .site-nav {
@@ -438,6 +444,33 @@ li {
   align-items: end;
 }
 
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.8rem;
+}
+
+.footer-logo {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 14px rgba(10, 79, 83, 0.2);
+}
+
+.footer-brand strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.footer-brand small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
 .footer-wrap h2 {
   font-size: clamp(2rem, 4vw, 3.1rem);
 }
@@ -472,10 +505,12 @@ li {
 }
 
 @keyframes drift {
+
   0%,
   100% {
     transform: translateY(0) translateX(0);
   }
+
   50% {
     transform: translateY(16px) translateX(10px);
   }
@@ -485,6 +520,7 @@ li {
   from {
     transform: translateY(-50%) rotate(0deg);
   }
+
   to {
     transform: translateY(-50%) rotate(360deg);
   }
@@ -494,6 +530,7 @@ li {
   from {
     transform: translateY(-50%) rotate(360deg);
   }
+
   to {
     transform: translateY(-50%) rotate(0deg);
   }
@@ -503,25 +540,30 @@ li {
   0% {
     box-shadow: 0 0 0 0 rgba(15, 106, 111, 0.45);
   }
+
   70% {
     box-shadow: 0 0 0 14px rgba(15, 106, 111, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(15, 106, 111, 0);
   }
 }
 
 @keyframes floatX {
+
   0%,
   100% {
     transform: translateY(-50%) translateX(0);
   }
+
   50% {
     transform: translateY(-50%) translateX(12px);
   }
 }
 
 @media (max-width: 1060px) {
+
   .four-col,
   .roadmap {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -565,6 +607,10 @@ li {
     padding-top: 4.2rem;
   }
 
+  .brand-subtext {
+    display: none;
+  }
+
   .hero-visual {
     height: 102px;
   }
@@ -601,6 +647,7 @@ li {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .orb,
   .ring,
   .pulse-dot,
