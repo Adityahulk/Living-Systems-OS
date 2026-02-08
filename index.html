@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalman Labs | LS-OS Computational Operating System for Biology</title>
+  <meta name="description"
+    content="Living Systems OS is a computational operating system for biology. We begin with an executable oncology wedge for EGFR-mutant NSCLC drug response." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Sora:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="#top" class="brand" aria-label="LS-OS Home">
+        <span class="brand-mark">LS</span>
+        <span class="brand-text">Kalman Labs</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+        Menu
+      </button>
+      <nav id="site-nav" class="site-nav">
+        <a href="#about">LS-OS</a>
+        <a href="#wedge">Wedge</a>
+        <a href="#mvp">MVP</a>
+        <a href="#research-collab">Collaborate</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero container reveal">
+      <p class="kicker">A Computational Operating System for Biology</p>
+      <h1>Living Systems OS</h1>
+      <p class="lead">
+        A foundational runtime to model, simulate, and steer living systems. LS-OS turns biology
+        from static data into executable software.
+      </p>
+      <p class="hero-sub">Built by Kalman Labs.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Talk to Us</a>
+        <a href="#wedge" class="btn btn-ghost">See First Wedge</a>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="pulse-dot dot-1"></div>
+        <div class="pulse-dot dot-2"></div>
+      </div>
+      <div class="hero-metrics">
+        <article>
+          <h3>Runtime</h3>
+          <p>Biological systems become executable, testable, and versioned</p>
+        </article>
+        <article>
+          <h3>Prediction</h3>
+          <p>Trajectory-level forecasts across time, not one-time labels</p>
+        </article>
+        <article>
+          <h3>Control</h3>
+          <p>Simulate what-if interventions before expensive real-world decisions</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section container reveal">
+      <div class="section-head">
+        <p class="kicker">Why LS-OS</p>
+        <h2>Biology Has Data. It Needs an Operating System.</h2>
+      </div>
+      <div class="grid two-col">
+        <article class="panel">
+          <h3>Today</h3>
+          <ul>
+            <li>Models are fragmented and hard to execute end-to-end</li>
+            <li>Predictions often fail when treatments change</li>
+            <li>Biology is mostly analyzed, rarely run like software</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>With LS-OS</h3>
+          <ul>
+            <li>Hybrid AI + mechanistic models inside one runtime</li>
+            <li>Perturbation-aware simulation for real treatment scenarios</li>
+            <li>Reproducible model lifecycle from data to deployment</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="wedge" class="section section-tint reveal">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Initial Wedge</p>
+          <h2>Executable Tumor Dynamics in EGFR-mutant NSCLC</h2>
+        </div>
+        <p class="statement">
+          Start narrow. Solve deeply. We begin with EGFR-mutant NSCLC and EGFR TKIs to predict
+          tumor response over time and anticipate resistance under different treatment strategies.
+        </p>
+        <div class="grid three-col">
+          <article class="panel">
+            <h3>Cancer</h3>
+            <p>EGFR-mutant non-small cell lung cancer</p>
+          </article>
+          <article class="panel">
+            <h3>Therapy</h3>
+            <p>Erlotinib, Gefitinib, Osimertinib</p>
+          </article>
+          <article class="panel">
+            <h3>Data</h3>
+            <p>Bulk RNA-seq + tumor volume trajectories</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="mvp" class="section container reveal">
+      <div class="section-head">
+        <p class="kicker">MVP</p>
+        <h2>Aspirational, Practical, Measurable</h2>
+      </div>
+      <div class="roadmap">
+        <article class="step">
+          <span>01</span>
+          <h3>Build</h3>
+          <p>Create an executable tumor dynamics model with drug perturbation terms.</p>
+        </article>
+        <article class="step">
+          <span>02</span>
+          <h3>Train</h3>
+          <p>Fit on patient cohorts using RNA-seq and longitudinal outcomes.</p>
+        </article>
+        <article class="step">
+          <span>03</span>
+          <h3>Validate</h3>
+          <p>Beat Cox and black-box deep learning on held-out response trajectories.</p>
+        </article>
+        <article class="step">
+          <span>04</span>
+          <h3>Deploy</h3>
+          <p>Support therapy ranking and resistance-aware trial decisions.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="research-collab" class="section container reveal">
+      <div class="section-head">
+        <p class="kicker">Collaborate in Research</p>
+        <h2>Work With Kalman Labs on LS-OS</h2>
+      </div>
+      <div class="grid three-col">
+        <article class="panel">
+          <h3>Cohort Studies</h3>
+          <p>Joint retrospective analyses on NSCLC cohorts to test trajectory predictions.</p>
+        </article>
+        <article class="panel">
+          <h3>Method Co-Development</h3>
+          <p>Partner on model design, validation endpoints, and translational workflows.</p>
+        </article>
+        <article class="panel">
+          <h3>Pilot Programs</h3>
+          <p>Run practical pilots for treatment ranking and resistance-aware planning.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="site-footer reveal">
+    <div class="container footer-wrap">
+      <div>
+        <p class="kicker">Contact</p>
+        <h2>Run Biology Like Software.</h2>
+        <p class="footer-text">
+          We work with biotech, pharma, and translational research teams on oncology modeling.
+        </p>
+      </div>
+      <div class="footer-actions">
+        <a href="mailto:company@kalman-labs.com" class="btn btn-primary">company@kalman-labs.com</a>
+        <p>Availability: pilot collaborations for 2026 oncology programs</p>
+        <small>© <span id="year"></span> Kalman Labs</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
