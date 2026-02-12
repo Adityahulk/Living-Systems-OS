@@ -1,207 +1,164 @@
-# Kalman Labs | Living Systems OS (LS-OS)
+# Living Systems OS Research
 
-Living Systems OS (LS-OS) is a computational operating system for biology, built by **Kalman Labs**.
+This repository contains the research codebase for LS-OS work on executable hybrid tumor dynamics in EGFR-mutant NSCLC.
 
-This repository is the shared workspace for:
-- Research development (models, experiments, validation)
-- Product development (runtime, APIs, tooling, platform layers)
-- External communication assets (company and scientific narrative)
+## Scope
 
----
+The active research objective is to build and evaluate a hybrid mechanistic-learning model that maps:
 
-## 1. Mission
+- RNA-seq expression -> pathway activity
+- Pathway activity -> ODE parameters (`r`, `alpha`, `K`)
+- ODE simulation -> resistance timing / progression dynamics
 
-Biology is data-rich but model-poor.  
-Kalman Labs is building LS-OS so biological systems can be:
-- Executable
-- Predictive over time
-- Controllable under perturbations
-- Reproducible and versioned
+Benchmarks include Cox and deep learning baselines with repeated stratified cross-validation, perturbation robustness, and ablations.
 
-Core thesis: biology should be run like software, not only analyzed like static data.
+## Repository Structure
 
----
+- `/Users/serverport/Living-Systems-OS/research-backend` : all research code, configs, scripts, and outputs
+- `/Users/serverport/Living-Systems-OS/frontend` : landing page assets (not part of research pipeline)
 
-## 2. Current Wedge
+## Research Stack (in `research-backend`)
 
-Our first wedge is tightly scoped:
-- **Indication:** EGFR-mutant non-small cell lung cancer (NSCLC)
-- **Treatment class:** EGFR tyrosine kinase inhibitors (TKIs)
-- **Input focus:** bulk RNA-seq + longitudinal tumor burden
-- **Target outputs:** treatment response trajectories + resistance emergence forecasts
+- `src/lsos_research/` : core library modules
+- `scripts/` : end-to-end execution scripts
+- `configs/default.yaml` : experiment and cohort config
+- `pathways/pathway_gene_sets.yaml` : pathway definitions
+- `data/` : local data workspace (`raw`, `interim`, `processed`, `external`)
+- `results/` : generated metrics, figures, tables, model artifacts
+- `paper/` : generated result summaries and paper-facing artifacts
 
-MVP objective:
-- Build an executable tumor dynamics model
-- Train on real cohorts
-- Benchmark against Cox and black-box deep learning baselines
+## Architecture And Flow
 
----
-
-## 3. Repository Scope
-
-This repo will evolve into a multi-track workspace supporting:
-- Scientific modeling and validation
-- Data processing and cohort management
-- Runtime and simulation infrastructure
-- Programmatic interfaces (internal/external)
-- Documentation for research, product, and strategy
-
-This is intentional: research and engineering are co-developed here.
-
----
-
-## 4. Working Model
-
-We follow a research-to-product loop:
-1. Define a bounded biological question
-2. Build executable model assumptions
-3. Train and validate on cohorts
-4. Stress-test under perturbations and shifts
-5. Convert validated methods into reusable platform components
-
-Every major claim should map to:
-- A defined cohort scope
-- A validation protocol
-- Reproducible experiment artifacts
-
----
-
-## 5. Suggested Repository Layout
-
-As the codebase grows, organize work into these top-level areas:
-
-```text
-.
-├── research/            # hypotheses, methods, experiments, papers
-├── data/                # dataset metadata, schemas, cohort definitions (no raw PHI)
-├── models/              # model definitions, checkpoints metadata, configs
-├── runtime/             # simulation and execution engine components
-├── api/                 # service interfaces and integration surfaces
-├── docs/                # scientific specs, architecture docs, decision records
-├── experiments/         # run configs, results manifests, benchmark outputs
-└── website/             # external communication assets (optional split later)
+```mermaid
+flowchart TD
+    A["TCGA LUAD RNA Counts (GDC)"] --> B["Sample Sheet Build + Case Mapping"]
+    C["Clinical Tables (TCGA LUAD)"] --> D["Survival Frame (PFS Days/Event)"]
+    E["Public EGFR Mutation Case Lists (cBioPortal)"] --> F["EGFR Cohort Selection Strategy (Primary/Intersection/Union)"]
+    B --> F
+    F --> G["Cohort-Filtered RNA Matrix"]
+    G --> H["TPM Normalization + log2(TPM+1) + Z-score"]
+    H --> I["Pathway Activity Scoring (EGFR/PI3K-MAPK/Apoptosis/Cell Cycle/EMT)"]
+    D --> J["Model Targets (PFS Proxy)"]
+    I --> K["Hybrid Parameter Net (r, alpha, K)"]
+    K --> L["Differentiable ODE Tumor Dynamics"]
+    L --> M["Predicted Resistance Time + Trajectories"]
+    J --> N["Cross-Validation Training + Evaluation"]
+    M --> N
+    N --> O["Baselines (Cox, AFT, DeepSurv, MLP, GBR, RF)"]
+    N --> P["Ablations"]
+    N --> Q["Perturbation Experiments"]
+    O --> R["Metrics, Statistics, Calibration, Figures"]
+    P --> R
+    Q --> R
+    R --> S["Paper-Ready Outputs + Model Artifacts"]
 ```
 
+Complete run flow:
+1. Build RNA sample sheet from downloaded GDC RNA files and map to case/sample IDs.
+2. Extract and parse clinical tables to construct `pfs_days` and `pfs_event`.
+3. Build EGFR-mutant cohort from public mutation case lists using configured strategy.
+4. Filter RNA to primary tumor EGFR cohort and compute TPM/log/Z normalized matrix.
+5. Convert gene-level expression into pathway activity features.
+6. Train hybrid model (`pathway -> r, alpha, K -> ODE`) with repeated stratified CV.
+7. Train all baselines on the same CV splits for fair comparison.
+8. Run ablation suite and treatment perturbation simulations.
+9. Save final metrics/tables/figures/model checkpoint and generate research summary report.
+
+Model internals (hybrid executable core):
+
+```mermaid
+flowchart LR
+    X["Pathway Activity Vector (per patient)"] --> N1["ParameterNet (MLP: 32 -> 16)"]
+    N1 --> U1["r_raw"]
+    N1 --> U2["alpha_raw"]
+    N1 --> U3["K_raw"]
+    U1 --> C1["r = exp(r_raw)"]
+    U2 --> C2["alpha = sigmoid(alpha_raw)"]
+    U3 --> C3["K = exp(K_raw)"]
+    C1 --> ODE["Tumor ODE: dV/dt = r*V*(1-V/K) - alpha*D(t)*V"]
+    C2 --> ODE
+    C3 --> ODE
+    D["Treatment Schedule D(t)"] --> ODE
+    IC["Initial Condition V(0)=1.0"] --> ODE
+    ODE --> T["Trajectory V(t)"]
+    T --> R["Differentiable Resistance-Time Surrogate"]
+    R --> L1["Primary Loss: MSE(predicted_resistance_time, PFS_days)"]
+    C1 --> L2["Parameter Regularization / Plausibility"]
+    C2 --> L2
+    C3 --> L2
+    T --> L3["Trajectory Smoothness Penalty"]
+    L1 --> LT["Total Training Loss"]
+    L2 --> LT
+    L3 --> LT
+```
+
+## Data Inputs
+
+Primary inputs currently used:
+
+- TCGA-LUAD RNA counts (local GDC download)
+- TCGA-LUAD clinical tables
+- Public EGFR-mutant case lists (cBioPortal-derived TSVs)
+
 Notes:
-- Keep sensitive/raw data out of git.
-- Commit dataset descriptors, schemas, and provenance metadata only.
 
----
+- Controlled-access GDC mutation MAF is optional for v1 and not required for current public pipeline.
+- Large datasets and generated artifacts are git-ignored.
 
-## 6. Research Standards
+## Environment Setup
 
-Minimum expectations for research work merged to main branches:
-- Clear problem statement and biological scope
-- Explicit assumptions and constraints
-- Defined baseline comparisons
-- Reproducible run instructions
-- Quantitative evaluation summary
+```bash
+cd /Users/serverport/Living-Systems-OS/research-backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
 
-Recommended experiment metadata (per run):
-- Run ID
-- Date/time
-- Cohort version
-- Feature set
-- Model version
-- Training config hash
-- Evaluation metrics
-- Notes on failures/edge cases
+## Run Order
 
----
+From `/Users/serverport/Living-Systems-OS/research-backend`:
 
-## 7. Engineering Standards
+```bash
+source .venv/bin/activate
 
-- Keep modules small, explicit, and testable.
-- Prefer deterministic pipelines where feasible.
-- Document interface contracts before broad integration.
-- Add tests for any behavior used in downstream research conclusions.
-- Avoid silent changes to core assumptions.
+python scripts/build_sample_sheet.py \
+  --gdc-dir data/raw/gdc \
+  --out data/interim/rna_sample_sheet.tsv \
+  --mapped-out data/interim/rna_sample_sheet_mapped.tsv
 
-For model/runtime changes, include:
-- What changed
-- Why it changed
-- Expected impact on evaluation outcomes
+python scripts/run_pipeline.py \
+  --config configs/default.yaml \
+  --root . \
+  --sample-sheet data/interim/rna_sample_sheet_mapped.tsv
 
----
+python scripts/build_report.py
+```
 
-## 8. Collaboration and Branching
+## Main Outputs
 
-Suggested branch naming:
-- `research/<topic>`
-- `model/<topic>`
-- `runtime/<topic>`
-- `docs/<topic>`
-- `infra/<topic>`
+- `results/metrics/fold_metrics.tsv`
+- `results/metrics/statistical_tests.json`
+- `results/metrics/perturbation_results.tsv`
+- `results/tables/predictions_all.tsv`
+- `results/tables/hybrid_parameters.tsv`
+- `results/tables/egfr_source_concordance.tsv`
+- `results/models/hybrid_final.pt`
+- `results/figures/*.png`
+- `paper/results_summary.md`
 
-Commit style:
-- One coherent change per commit
-- Message includes scope and intent
+## Reproducibility
 
-Pull request checklist:
-- Problem and scope
-- Validation or test evidence
-- Risks and open questions
-- Follow-up items
+- Seed-controlled runs via config
+- Repeated stratified CV and shared splits across models
+- Deterministic preprocessing caches in `data/processed`
+- Explicit config-driven cohort strategy and perturbation scenarios
 
----
+## Current Limitations
 
-## 9. Data, Privacy, and Compliance
+- EGFR cohort labels are sourced from public mutation resources (no controlled GDC MAF in current path)
+- Clinical endpoint proxies follow available TCGA progression/follow-up fields
+- External validation cohorts are not yet mandatory in default run
 
-Principles:
-- Least-privilege data handling
-- No PHI in repository history
-- Keep provenance and governance auditable
-- Respect licensing and data-use restrictions for every dataset
+## Research Goal
 
-Before using a dataset, record:
-- Source
-- Access terms
-- Allowed use
-- Retention constraints
-- Attribution requirements
-
----
-
-## 10. Roadmap (Living Document)
-
-Near-term:
-- Lock MVP cohort and baseline protocols
-- Build first executable NSCLC response model
-- Establish benchmark suite for trajectory prediction and resistance forecasting
-
-Mid-term:
-- Harden runtime abstraction for reusability
-- Expand perturbation simulation workflows
-- Introduce partner-facing outputs for trial support
-
-Long-term:
-- Generalize LS-OS beyond first oncology wedge
-- Build a scalable developer platform on top of executable biology
-
----
-
-## 11. How to Contribute
-
-If you are adding research:
-- Start with a concise hypothesis and scope
-- Define evaluation criteria before training
-- Include reproducibility notes
-
-If you are adding engineering:
-- Start from interface and dependency boundaries
-- Add tests and migration notes if behavior changes
-- Keep docs aligned with implementation
-
-If you are adding documentation:
-- Prioritize clear assumptions, decisions, and tradeoffs
-- Link docs to concrete artifacts (runs, configs, modules)
-
----
-
-## 12. Ownership
-
-**Company:** Kalman Labs  
-**Platform:** Living Systems OS (LS-OS)
-
-For collaboration inquiries, use the project contact channels maintained by the Kalman Labs team.
-
+Demonstrate that executable hybrid dynamics models provide intervention-aware and biologically plausible prediction advantages over purely black-box baselines for EGFR-mutant NSCLC response modeling.
