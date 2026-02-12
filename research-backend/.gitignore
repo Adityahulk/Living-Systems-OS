@@ -1,0 +1,49 @@
+# Python / build
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter / local editor state
+.ipynb_checkpoints/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Logs / runtime artifacts
+*.log
+logs/
+
+# Local secrets / env
+.env
+.env.*
+
+# Research data (large/generated)
+data/raw/
+data/processed/
+data/external/
+
+# Interim generated artifacts
+data/interim/.cache/
+data/interim/.mpl/
+data/interim/*smoke*.tsv
+data/interim/gdc_maf_download.log
+
+# Model outputs / figures / reports
+results/
+
+# OS/tool downloads and binaries
+gdc-client.zip

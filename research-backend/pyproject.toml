@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lsos-research"
+version = "0.1.0"
+description = "Executable hybrid tumor dynamics modeling for EGFR-mutant NSCLC"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Kalman Labs"}]
+dependencies = [
+  "numpy>=1.25",
+  "pandas>=2.1",
+  "scipy>=1.11",
+  "pyyaml>=6.0",
+  "scikit-learn>=1.4",
+  "matplotlib>=3.8",
+  "seaborn>=0.13",
+  "torch>=2.2",
+  "torchdiffeq>=0.2.4",
+  "lifelines>=0.28",
+  "statsmodels>=0.14",
+  "requests>=2.31",
+  "tqdm>=4.66",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+

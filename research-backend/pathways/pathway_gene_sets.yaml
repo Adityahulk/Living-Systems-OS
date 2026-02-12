@@ -1,0 +1,52 @@
+EGFR_SIGNALING:
+  - EGFR
+  - ERBB2
+  - ERBB3
+  - GRB2
+  - SOS1
+  - SHC1
+  - GAB1
+
+PI3K_AKT:
+  - PIK3CA
+  - PIK3R1
+  - PTEN
+  - AKT1
+  - AKT2
+  - MTOR
+  - PDPK1
+
+MAPK:
+  - KRAS
+  - NRAS
+  - BRAF
+  - MAP2K1
+  - MAP2K2
+  - MAPK1
+  - MAPK3
+
+APOPTOSIS:
+  - BCL2
+  - BCL2L1
+  - BAX
+  - CASP3
+  - CASP8
+  - CASP9
+  - TP53
+
+CELL_CYCLE:
+  - CCND1
+  - CDK4
+  - CDK6
+  - CDKN1A
+  - RB1
+  - E2F1
+
+EMT_STRESS:
+  - VIM
+  - CDH1
+  - ZEB1
+  - SNAI1
+  - TWIST1
+  - HIF1A
+  - TGFB1

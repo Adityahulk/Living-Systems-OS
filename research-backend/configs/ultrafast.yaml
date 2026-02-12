@@ -1,0 +1,65 @@
+project:
+  name: LS-OS EGFR-NSCLC Hybrid Dynamics
+  seed: 42
+  timezone: UTC
+paths:
+  raw_dir: data/raw
+  interim_dir: data/interim
+  processed_dir: data/processed
+  results_dir: results
+  pathways_file: pathways/pathway_gene_sets.yaml
+  manifest_file: gdc_manifest.2026-02-10.234928.txt
+  clinical_tarball: clinical.project-tcga-luad.2026-02-10.tar.gz
+cohort:
+  project_id: TCGA-LUAD
+  primary_tumor_sample_code: '01'
+  egfr_mutation_patterns:
+  - EGFR
+  public_egfr_case_list: data/external/public_mutations/egfr_case_ids_from_cbioportal_luad.tsv
+  min_followup_days: 30
+preprocessing:
+  min_gene_tpm: 0.1
+  min_detected_fraction: 0.2
+  variance_threshold: 1.0e-05
+  use_ssgsea: false
+model:
+  hidden_dims:
+  - 32
+  - 16
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 2
+  early_stopping_patience: 1
+  ode_t_max_days: 300
+  ode_steps: 40
+loss:
+  mse_weight: 1.0
+  param_l2_weight: 0.0001
+  plausibility_weight: 0.001
+  smoothness_weight: 0.001
+training:
+  n_splits: 2
+  bootstrap_iterations: 20
+perturbations:
+  scenarios:
+    standard:
+      dose_scale: 1.0
+      start_day: 0
+      interruption_windows: []
+    reduced_dose:
+      dose_scale: 0.5
+      start_day: 0
+      interruption_windows: []
+    delayed_start:
+      dose_scale: 1.0
+      start_day: 60
+      interruption_windows: []
+    interruption:
+      dose_scale: 1.0
+      start_day: 0
+      interruption_windows:
+      - - 120
+        - 180
+ablation:
+  run:
+  - no_ode
