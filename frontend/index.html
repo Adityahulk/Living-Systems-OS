@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kalman Labs | LS-OS Computational Operating System for Biology</title>
   <meta name="description"
-    content="Living Systems OS is a computational operating system for biology. We begin with an executable oncology wedge for EGFR-mutant NSCLC drug response." />
+    content="Living Systems OS is a computational operating system for biology. Kalman Labs builds executable, intervention-aware models from molecular data." />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="shortcut icon" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,9 +35,10 @@
         Menu
       </button>
       <nav id="site-nav" class="site-nav">
-        <a href="#about">LS-OS</a>
-        <a href="#wedge">Wedge</a>
+        <a href="#thesis">LS-OS</a>
         <a href="#mvp">MVP</a>
+        <a href="#layers">Layers</a>
+        <a href="#roadmap">Path</a>
         <a href="#research-collab">Collaborate</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -47,15 +48,15 @@
   <main id="top">
     <section class="hero container reveal">
       <p class="kicker">A Computational Operating System for Biology</p>
-      <h1>Living Systems OS</h1>
+      <h1>LS-OS</h1>
       <p class="lead">
-        A foundational runtime to model, simulate, and steer living systems. LS-OS turns biology
-        from static data into executable software.
+        Living Systems OS is a research and engineering program to make biology executable,
+        intervention-aware, and reproducible.
       </p>
-      <p class="hero-sub">Built by Kalman Labs.</p>
+      <p class="hero-sub">Built by Kalman Labs for a new class of biological simulation infrastructure.</p>
       <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary">Talk to Us</a>
-        <a href="#wedge" class="btn btn-ghost">See First Wedge</a>
+        <a href="#mvp" class="btn btn-primary">See MVP</a>
+        <a href="#layers" class="btn btn-ghost">See Layers</a>
       </div>
       <div class="hero-visual" aria-hidden="true">
         <div class="ring ring-1"></div>
@@ -66,98 +67,126 @@
       </div>
       <div class="hero-metrics">
         <article>
-          <h3>Runtime</h3>
-          <p>Biological systems become executable, testable, and versioned</p>
+          <h3>Executable</h3>
+          <p>From molecular measurements to runnable disease dynamics</p>
         </article>
         <article>
-          <h3>Prediction</h3>
-          <p>Trajectory-level forecasts across time, not one-time labels</p>
+          <h3>Perturbation-Aware</h3>
+          <p>Simulate response under dose, schedule, and treatment changes</p>
         </article>
         <article>
-          <h3>Control</h3>
-          <p>Simulate what-if interventions before expensive real-world decisions</p>
+          <h3>Reproducible</h3>
+          <p>Versioned models, explicit assumptions, and auditable outputs</p>
         </article>
       </div>
     </section>
 
-    <section id="about" class="section container reveal">
+    <section id="thesis" class="section container reveal">
       <div class="section-head">
-        <p class="kicker">Why LS-OS</p>
-        <h2>Biology Has Data. It Needs an Operating System.</h2>
+        <p class="kicker">Core Thesis</p>
+        <h2>Biology Should Be Run, Not Only Described.</h2>
       </div>
       <div class="grid two-col">
         <article class="panel">
-          <h3>Today</h3>
+          <h3>Current State</h3>
           <ul>
-            <li>Models are fragmented and hard to execute end-to-end</li>
-            <li>Predictions often fail when treatments change</li>
-            <li>Biology is mostly analyzed, rarely run like software</li>
+            <li>High-dimensional data, low executable modeling capacity</li>
+            <li>Static models struggle under intervention shifts</li>
+            <li>Limited causal simulation for treatment planning</li>
           </ul>
         </article>
         <article class="panel">
-          <h3>With LS-OS</h3>
+          <h3>LS-OS Direction</h3>
           <ul>
-            <li>Hybrid AI + mechanistic models inside one runtime</li>
-            <li>Perturbation-aware simulation for real treatment scenarios</li>
-            <li>Reproducible model lifecycle from data to deployment</li>
+            <li>Hybrid mechanistic-learning engines with explicit dynamics</li>
+            <li>Counterfactual simulation under intervention schedules</li>
+            <li>Reusable runtime interfaces across disease settings</li>
           </ul>
         </article>
       </div>
     </section>
 
-    <section id="wedge" class="section section-tint reveal">
+    <section id="mvp" class="section section-tint reveal">
       <div class="container">
         <div class="section-head">
-          <p class="kicker">Initial Wedge</p>
-          <h2>Executable Tumor Dynamics in EGFR-mutant NSCLC</h2>
+          <p class="kicker">Layer 1 MVP</p>
+          <h2>Executable Tumor Response Dynamics in EGFR-mutant NSCLC</h2>
         </div>
         <p class="statement">
-          Start narrow. Solve deeply. We begin with EGFR-mutant NSCLC and EGFR TKIs to predict
-          tumor response over time and anticipate resistance under different treatment strategies.
+          Start narrow, solve deeply. The first kernel of LS-OS is a hybrid model that maps
+          RNA-seq to pathway state, pathway state to ODE parameters, and ODE simulation to
+          resistance timing under EGFR TKI perturbations.
         </p>
-        <div class="grid three-col">
+        <div class="grid four-col">
           <article class="panel">
-            <h3>Cancer</h3>
-            <p>EGFR-mutant non-small cell lung cancer</p>
+            <h3>Input</h3>
+            <p>Bulk RNA-seq and curated clinical progression outcomes</p>
           </article>
           <article class="panel">
-            <h3>Therapy</h3>
-            <p>Erlotinib, Gefitinib, Osimertinib</p>
+            <h3>Abstraction</h3>
+            <p>Pathway activity representation for intervention-relevant state</p>
           </article>
           <article class="panel">
-            <h3>Data</h3>
-            <p>Bulk RNA-seq + tumor volume trajectories</p>
+            <h3>Dynamics</h3>
+            <p>Constrained parameter net feeding differentiable tumor ODEs</p>
+          </article>
+          <article class="panel">
+            <h3>Output</h3>
+            <p>Trajectory behavior and resistance timing forecasts</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="mvp" class="section container reveal">
+    <section id="layers" class="section container reveal">
       <div class="section-head">
-        <p class="kicker">MVP</p>
-        <h2>Aspirational, Practical, Measurable</h2>
+        <p class="kicker">Company Build Stack</p>
+        <h2>Four Layers, One Direction</h2>
       </div>
-      <div class="roadmap">
+      <div class="roadmap roadmap-layers">
         <article class="step">
           <span>01</span>
-          <h3>Build</h3>
-          <p>Create an executable tumor dynamics model with drug perturbation terms.</p>
+          <h3>Disease Instance</h3>
+          <p>EGFR NSCLC executable model as first verified kernel.</p>
         </article>
         <article class="step">
           <span>02</span>
-          <h3>Train</h3>
-          <p>Fit on patient cohorts using RNA-seq and longitudinal outcomes.</p>
+          <h3>Reusable Framework</h3>
+          <p>Hybrid ODE + ML architecture reusable across cohorts.</p>
         </article>
         <article class="step">
           <span>03</span>
-          <h3>Validate</h3>
-          <p>Beat Cox and black-box deep learning on held-out response trajectories.</p>
+          <h3>Runtime Engine</h3>
+          <p>Standard interfaces for state, intervention, and simulation.</p>
         </article>
         <article class="step">
           <span>04</span>
-          <h3>Deploy</h3>
-          <p>Support therapy ranking and resistance-aware trial decisions.</p>
+          <h3>Platform Layer</h3>
+          <p>Programmatic integration for therapy design and trial strategy.</p>
         </article>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section section-tint reveal">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Path Ahead</p>
+          <h2>From EGFR Kernel to Biological Runtime</h2>
+        </div>
+        <div class="grid three-col">
+          <article class="panel">
+            <h3>Phase A: Evidence</h3>
+            <p>Complete rigorous EGFR benchmark package with ablations, calibration, and robustness.</p>
+          </article>
+          <article class="panel">
+            <h3>Phase B: Generalization</h3>
+            <p>Port the same engine to a second disease setting with minimal code changes.</p>
+          </article>
+          <article class="panel">
+            <h3>Phase C: Infrastructure</h3>
+            <p>Stabilize runtime APIs so intervention simulation becomes a reusable compute layer.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -196,7 +225,7 @@
         <p class="kicker">Contact</p>
         <h2>Run Biology Like Software.</h2>
         <p class="footer-text">
-          We work with biotech, pharma, and translational research teams on oncology modeling.
+          We collaborate with biotech, pharma, and translational research teams on executable disease models.
         </p>
       </div>
       <div class="footer-actions">

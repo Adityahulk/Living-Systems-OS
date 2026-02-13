@@ -421,6 +421,33 @@ li {
   gap: 0.9rem;
 }
 
+.roadmap-layers .step {
+  position: relative;
+  overflow: hidden;
+}
+
+.roadmap-layers .step::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  opacity: 0.72;
+}
+
+.roadmap-layers .step::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  right: -78px;
+  top: -78px;
+  background: radial-gradient(circle, rgba(15, 106, 111, 0.12), transparent 62%);
+  pointer-events: none;
+}
+
 .step span {
   display: inline-block;
   margin-bottom: 0.42rem;
@@ -428,6 +455,21 @@ li {
   font-size: 0.77rem;
   letter-spacing: 0.09em;
   font-weight: 700;
+}
+
+#roadmap .panel {
+  position: relative;
+  isolation: isolate;
+}
+
+#roadmap .panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 2px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: linear-gradient(90deg, rgba(15, 106, 111, 0.56), rgba(185, 128, 44, 0.5));
+  z-index: -1;
 }
 
 .site-footer {
