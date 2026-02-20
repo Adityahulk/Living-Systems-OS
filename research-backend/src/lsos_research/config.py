@@ -12,6 +12,8 @@ import yaml
 
 @dataclass
 class ProjectPaths:
+    """Resolved project directory paths used by the pipeline."""
+
     root: Path
     raw_dir: Path
     interim_dir: Path
@@ -20,11 +22,13 @@ class ProjectPaths:
 
 
 def load_config(config_path: str | Path) -> dict[str, Any]:
+    """Load YAML configuration into a Python dictionary."""
     with Path(config_path).open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
 def resolve_paths(config: dict[str, Any], root: str | Path) -> ProjectPaths:
+    """Resolve configured relative paths against a chosen repository root."""
     root_path = Path(root).resolve()
     p = config["paths"]
     return ProjectPaths(
@@ -37,11 +41,13 @@ def resolve_paths(config: dict[str, Any], root: str | Path) -> ProjectPaths:
 
 
 def ensure_dirs(paths: ProjectPaths) -> None:
+    """Create required workspace directories if they do not exist."""
     for d in [paths.raw_dir, paths.interim_dir, paths.processed_dir, paths.results_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
 
 def set_global_seed(seed: int) -> None:
+    """Set deterministic seeds across Python, NumPy, and PyTorch."""
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)

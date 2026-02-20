@@ -10,6 +10,7 @@ from lsos_research.data_ingest import filter_manifest_for_core_files, read_gdc_m
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse CLI arguments for phase-1 manifest preparation."""
     ap = argparse.ArgumentParser(description="Prepare Phase 1 GDC manifest subsets")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--out-dir", default="data/interim")
@@ -17,6 +18,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Generate subset manifests (core/RNA/MAF/clinical) and summary table."""
     args = parse_args()
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)

@@ -11,6 +11,7 @@ sns.set_theme(style="whitegrid", context="talk")
 
 
 def save_metric_boxplot(metric_df: pd.DataFrame, out_path: str | Path, metric: str) -> None:
+    """Save model-comparison boxplot for a chosen metric."""
     plt.figure(figsize=(10, 5))
     sns.boxplot(data=metric_df, x="model", y=metric)
     plt.xticks(rotation=25, ha="right")
@@ -20,6 +21,16 @@ def save_metric_boxplot(metric_df: pd.DataFrame, out_path: str | Path, metric: s
 
 
 def save_calibration_plot(calib_df: pd.DataFrame, out_path: str | Path) -> None:
+    """Save calibration curve (predicted vs observed), with empty-data fallback."""
+    if calib_df.empty:
+        plt.figure(figsize=(6, 4))
+        plt.text(0.5, 0.5, "Calibration unavailable (insufficient prediction variance)", ha="center", va="center")
+        plt.axis("off")
+        plt.tight_layout()
+        plt.savefig(out_path, dpi=300)
+        plt.close()
+        return
+
     plt.figure(figsize=(6, 6))
     plt.plot(calib_df["pred_mean"], calib_df["true_mean"], marker="o", label="Model")
     lims = [
@@ -36,6 +47,7 @@ def save_calibration_plot(calib_df: pd.DataFrame, out_path: str | Path) -> None:
 
 
 def save_ablation_barplot(metric_df: pd.DataFrame, out_path: str | Path) -> None:
+    """Save mean+SD RMSE barplot for ablation models."""
     plt.figure(figsize=(11, 5))
     sns.barplot(data=metric_df, x="model", y="rmse", estimator="mean", errorbar="sd")
     plt.xticks(rotation=25, ha="right")
@@ -46,6 +58,7 @@ def save_ablation_barplot(metric_df: pd.DataFrame, out_path: str | Path) -> None
 
 
 def save_perturbation_plot(df: pd.DataFrame, out_path: str | Path) -> None:
+    """Save scenario-wise resistance-time distribution plot."""
     plt.figure(figsize=(9, 5))
     sns.boxplot(data=df, x="scenario", y="pred_resistance_days")
     plt.ylabel("Predicted resistance time (days)")

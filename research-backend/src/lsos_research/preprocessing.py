@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Callable
 
 import numpy as np
 import pandas as pd
 
 
 def load_sample_sheet(path: str | Path) -> pd.DataFrame:
+    """Load and validate required columns from RNA sample sheet TSV."""
     df = pd.read_csv(path, sep="\t")
     required = {"file_path", "case_id", "sample_barcode"}
     missing = required - set(df.columns)
@@ -16,6 +18,7 @@ def load_sample_sheet(path: str | Path) -> pd.DataFrame:
 
 
 def _load_augmented_star_counts(file_path: str | Path) -> pd.DataFrame:
+    """Load one STAR count file and return per-gene TPM-ready table."""
     df = pd.read_csv(file_path, sep="\t", comment="#")
 
     if "gene_id" not in df.columns:
@@ -45,16 +48,30 @@ def _load_augmented_star_counts(file_path: str | Path) -> pd.DataFrame:
     )
 
 
-def build_tpm_matrix(sample_sheet: pd.DataFrame) -> pd.DataFrame:
+def build_tpm_matrix(
+    sample_sheet: pd.DataFrame,
+    log_every: int = 25,
+    logger: Callable[[str], None] | None = None,
+) -> pd.DataFrame:
+    """Build a genes x cases TPM matrix from all RNA files in sample sheet."""
     matrices: list[pd.DataFrame] = []
+    n_total = len(sample_sheet)
+    if n_total == 0:
+        raise ValueError("Sample sheet is empty after filtering; cannot build TPM matrix")
 
-    for row in sample_sheet.itertuples(index=False):
+    if logger is not None:
+        logger(f"[Preprocess] Building TPM matrix from {n_total} RNA files...")
+
+    for i, row in enumerate(sample_sheet.itertuples(index=False), start=1):
         fpath = Path(row.file_path)
         frame = _load_augmented_star_counts(fpath)
         frame = frame[["gene_name", "tpm"]].dropna()
         frame = frame.groupby("gene_name", as_index=False)["tpm"].sum()
         frame = frame.rename(columns={"tpm": row.case_id})
         matrices.append(frame)
+
+        if logger is not None and (i == 1 or i == n_total or (log_every > 0 and i % log_every == 0)):
+            logger(f"[Preprocess] TPM parsed {i}/{n_total} files")
 
     merged = matrices[0]
     for m in matrices[1:]:
@@ -63,10 +80,13 @@ def build_tpm_matrix(sample_sheet: pd.DataFrame) -> pd.DataFrame:
     merged = merged.fillna(0.0)
     merged = merged.set_index("gene_name")
     merged = merged.sort_index()
+    if logger is not None:
+        logger(f"[Preprocess] TPM matrix ready: genes={merged.shape[0]}, samples={merged.shape[1]}")
     return merged
 
 
 def log_zscore_normalize(tpm_matrix: pd.DataFrame) -> pd.DataFrame:
+    """Apply log2(TPM+1) then per-gene z-score normalization across cases."""
     x = np.log2(tpm_matrix + 1.0)
     mu = x.mean(axis=1)
     sigma = x.std(axis=1).replace(0, np.nan)
@@ -80,6 +100,7 @@ def filter_genes(
     min_detected_fraction: float,
     variance_threshold: float,
 ) -> pd.DataFrame:
+    """Filter genes by detection frequency and expression variance thresholds."""
     detection_rate = (tpm_matrix > min_gene_tpm).mean(axis=1)
     keep_detected = detection_rate >= min_detected_fraction
 

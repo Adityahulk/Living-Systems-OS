@@ -8,6 +8,7 @@ import pandas as pd
 
 
 def main() -> None:
+    """Validate that downloaded files exist and match manifest-declared sizes."""
     ap = argparse.ArgumentParser(description="Check download completeness for a GDC manifest")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--download-dir", required=True)

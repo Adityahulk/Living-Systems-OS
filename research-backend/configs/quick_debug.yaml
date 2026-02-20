@@ -1,5 +1,5 @@
 project:
-  name: "LS-OS EGFR-NSCLC Hybrid Dynamics"
+  name: "LS-OS EGFR-NSCLC Hybrid Dynamics QUICK"
   seed: 42
   timezone: "UTC"
 
@@ -7,7 +7,7 @@ paths:
   raw_dir: "data/raw"
   interim_dir: "data/interim"
   processed_dir: "data/processed"
-  results_dir: "results"
+  results_dir: "results_quick"
   pathways_file: "pathways/pathway_gene_sets.yaml"
   manifest_file: "gdc_manifest.2026-02-10.234928.txt"
   clinical_tarball: "clinical.project-tcga-luad.2026-02-10.tar.gz"
@@ -32,10 +32,10 @@ model:
   hidden_dims: [32, 16]
   learning_rate: 1.0e-3
   weight_decay: 1.0e-4
-  epochs: 300
-  early_stopping_patience: 35
-  ode_t_max_days: 900
-  ode_steps: 300
+  epochs: 60
+  early_stopping_patience: 12
+  ode_t_max_days: 600
+  ode_steps: 180
 
 loss:
   mse_weight: 1.0
@@ -44,12 +44,12 @@ loss:
   smoothness_weight: 1.0e-3
 
 training:
-  n_splits: 5
-  n_repeats: 3
-  bootstrap_iterations: 1000
-  max_sat_fraction: 0.2
-  min_pred_std: 5.0
-  min_unique_preds: 8
+  n_splits: 3
+  n_repeats: 1
+  bootstrap_iterations: 100
+  max_sat_fraction: 0.35
+  min_pred_std: 2.0
+  min_unique_preds: 4
 
 perturbations:
   scenarios:
@@ -65,16 +65,8 @@ perturbations:
       dose_scale: 1.0
       start_day: 60
       interruption_windows: []
-    interruption:
-      dose_scale: 1.0
-      start_day: 0
-      interruption_windows:
-        - [120, 180]
 
 ablation:
   run:
-    - no_pathway_compression
     - no_ode
     - unconstrained_parameters
-    - freeze_parameters
-    - no_drug_term

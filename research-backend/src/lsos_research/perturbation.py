@@ -7,13 +7,16 @@ from .hybrid_model import ODESimConfig, make_dose_fn, resistance_time_from_traje
 
 
 def simulate_perturbations(
-    r: torch.Tensor,
-    alpha: torch.Tensor,
+    r_s: torch.Tensor,
+    alpha_s: torch.Tensor,
     k: torch.Tensor,
     scenarios: dict,
     t_max_days: int,
     n_steps: int,
+    r_r: torch.Tensor | None = None,
+    rho: torch.Tensor | None = None,
 ) -> pd.DataFrame:
+    """Simulate treatment scenarios and return predicted resistance times."""
     rows = []
     for name, cfg in scenarios.items():
         windows = [tuple(x) for x in cfg.get("interruption_windows", [])]
@@ -23,11 +26,13 @@ def simulate_perturbations(
             interruption_windows=windows,
         )
         t, traj = simulate_trajectories(
-            r,
-            alpha,
+            r_s,
+            alpha_s,
             k,
             ODESimConfig(t_max_days=t_max_days, n_steps=n_steps, use_drug_term=True),
             dose_fn=dose_fn,
+            r_r=r_r,
+            rho=rho,
         )
         res_t = resistance_time_from_trajectory(t, traj).detach().cpu().numpy()
         for i, rt in enumerate(res_t):

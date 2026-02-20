@@ -11,6 +11,7 @@ GDC_FILES_ENDPOINT = "https://api.gdc.cancer.gov/files"
 
 
 def query_file_metadata(file_ids: list[str], fields: list[str], batch_size: int = 200) -> pd.DataFrame:
+    """Query GDC API metadata for file IDs in batches."""
     rows = []
     for i in range(0, len(file_ids), batch_size):
         chunk = file_ids[i : i + batch_size]
@@ -36,10 +37,12 @@ def query_file_metadata(file_ids: list[str], fields: list[str], batch_size: int 
 
 
 def write_gdc_filtered_manifest(manifest_df: pd.DataFrame, out_path: str | Path) -> None:
+    """Write filtered manifest as TSV."""
     manifest_df.to_csv(out_path, sep="\t", index=False)
 
 
 def build_rna_sample_sheet(gdc_download_dir: str | Path, out_path: str | Path) -> pd.DataFrame:
+    """Create initial RNA sample sheet from downloaded STAR count files."""
     rows = []
     root = Path(gdc_download_dir)
 
@@ -67,6 +70,7 @@ def remap_sample_sheet_with_metadata(
     metadata_df: pd.DataFrame,
     out_path: str | Path,
 ) -> pd.DataFrame:
+    """Replace placeholder IDs in sample sheet using GDC metadata mapping."""
     md = metadata_df.copy()
     if "file_name" not in md.columns:
         raise ValueError("Metadata missing required field: file_name")
@@ -81,6 +85,7 @@ def remap_sample_sheet_with_metadata(
         )
     elif "cases" in md.columns:
         def _parse_cases(v):
+            """Parse nested cases payload into (case_id, sample_barcode)."""
             if isinstance(v, str):
                 try:
                     v = ast.literal_eval(v)

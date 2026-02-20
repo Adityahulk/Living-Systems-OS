@@ -16,6 +16,7 @@ API_BASE = "https://api.gdc.cancer.gov/data"
 
 
 def build_session(total_retries: int, backoff_factor: float) -> requests.Session:
+    """Create retry-enabled HTTP session for resilient GDC downloads."""
     s = requests.Session()
     retry = Retry(
         total=total_retries,
@@ -34,6 +35,7 @@ def build_session(total_retries: int, backoff_factor: float) -> requests.Session
 
 
 def md5_file(path: Path, chunk_size: int = 1 << 20) -> str:
+    """Compute file MD5 checksum in streaming chunks."""
     h = hashlib.md5()
     with path.open("rb") as f:
         while True:
@@ -45,6 +47,7 @@ def md5_file(path: Path, chunk_size: int = 1 << 20) -> str:
 
 
 def is_complete(path: Path, expected_size: int | None, expected_md5: str | None) -> bool:
+    """Check whether a local file matches expected size/hash metadata."""
     if not path.exists():
         return False
     if expected_size is not None and path.stat().st_size != expected_size:
@@ -61,6 +64,7 @@ def download_one(
     expected_size: int | None,
     timeout: int,
 ) -> None:
+    """Download one GDC file, resuming partial downloads when possible."""
     out_file.parent.mkdir(parents=True, exist_ok=True)
 
     existing = out_file.stat().st_size if out_file.exists() else 0
@@ -81,6 +85,7 @@ def download_one(
 
 
 def main() -> None:
+    """Run robust manifest-driven downloader with integrity checks and retries."""
     ap = argparse.ArgumentParser(description="Robust downloader for GDC manifest files")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--out-dir", required=True)

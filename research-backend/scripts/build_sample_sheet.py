@@ -10,6 +10,7 @@ from lsos_research.gdc import build_rna_sample_sheet, query_file_metadata, remap
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse CLI arguments for sample-sheet construction."""
     ap = argparse.ArgumentParser(description="Build and map RNA sample sheet from GDC downloads")
     ap.add_argument("--gdc-dir", default="data/raw/gdc")
     ap.add_argument("--out", default="data/interim/rna_sample_sheet.tsv")
@@ -18,6 +19,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Build raw sample sheet, fetch metadata, and write mapped sample sheet."""
     args = parse_args()
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

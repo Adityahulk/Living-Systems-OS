@@ -8,12 +8,14 @@ import yaml
 
 
 def load_pathway_gene_sets(path: str | Path) -> dict[str, list[str]]:
+    """Load pathway-to-gene mapping YAML and deduplicate genes per pathway."""
     with Path(path).open("r", encoding="utf-8") as f:
         data: Mapping[str, list[str]] = yaml.safe_load(f)
     return {k: sorted(set(v)) for k, v in data.items()}
 
 
 def compute_pathway_activity(expr_z: pd.DataFrame, pathway_sets: dict[str, list[str]]) -> pd.DataFrame:
+    """Aggregate gene-level z-scores into pathway activity features per case."""
     # expr_z shape: genes x patients
     out = {}
     gene_index_upper = {g.upper(): g for g in expr_z.index}

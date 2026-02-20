@@ -10,6 +10,7 @@ def build_repeated_stratified_splits(
     n_repeats: int,
     seed: int,
 ) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Build repeated stratified train/validation splits from event labels."""
     y = np.asarray(y_event).astype(int)
     unique, counts = np.unique(y, return_counts=True)
     if len(unique) < 2:
